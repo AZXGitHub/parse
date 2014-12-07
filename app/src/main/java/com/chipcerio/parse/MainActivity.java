@@ -4,12 +4,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,31 +31,14 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get a category name
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
-        query.getInBackground(Category.TECHNOLOGY, new GetCallback<ParseObject>() {
+        ParsePush.subscribeInBackground("", new SaveCallback() {
             @Override
-            public void done(ParseObject category, ParseException e) {
-                if (category == null) return;
-
-                ParseObject event = new ParseObject("Event");
-                event.put("event_detail", "Eat, Skate, Repeat");
-                event.put("event_image", "http://i.imgur.com/57EFL2y.jpg");
-                event.put("event_location", "Fuente Osmena Rotunda, Cebu City");
-                event.put("event_name", "Cebu Skate Festival 2014");
-                event.put("event_latitude", new ParseGeoPoint(10.3098, 123.8932)); // GeoPoint
-
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                try {
-                    event.put("event_date", sdf.parse("09/19/2014"));
-                } catch (java.text.ParseException e1) {
-                    e1.printStackTrace();
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(MainActivity.this, "Subscribed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_LONG).show();
                 }
-
-                event.put("category", category);
-
-                event.saveInBackground();
-
             }
         });
 

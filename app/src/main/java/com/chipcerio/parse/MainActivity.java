@@ -1,20 +1,14 @@
 package com.chipcerio.parse;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class MainActivity extends ActionBarActivity {
+    private static final String TAG = "CHIPCERIO";
 
     interface Category {
         String TECHNOLOGY  = "5JimgqyJB1";
@@ -23,38 +17,34 @@ public class MainActivity extends ActionBarActivity {
         String OTHERS      = "3btYSTqO7T";
     }
 
+    interface Class {
+        String CATEGORY = "/classes/Category/";
+        String EVENT = "/classes/Event/";
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get a category name
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
-        query.getInBackground(Category.TECHNOLOGY, new GetCallback<ParseObject>() {
+        new AsyncTask<Void, Void, Response>() {
             @Override
-            public void done(ParseObject category, ParseException e) {
-                if (category == null) return;
-
-                ParseObject event = new ParseObject("Event");
-                event.put("event_detail", "Eat, Skate, Repeat");
-                event.put("event_image", "http://i.imgur.com/57EFL2y.jpg");
-                event.put("event_location", "Fuente Osmena Rotunda, Cebu City");
-                event.put("event_name", "Cebu Skate Festival 2014");
-                event.put("event_latitude", new ParseGeoPoint(10.3098, 123.8932)); // GeoPoint
-
-                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                try {
-                    event.put("event_date", sdf.parse("09/19/2014"));
-                } catch (java.text.ParseException e1) {
-                    e1.printStackTrace();
-                }
-
-                event.put("category", category);
-
-                event.saveInBackground();
-
+            protected Response doInBackground(Void... params) {
+                Request httpRequest = new Request(Class.CATEGORY + Category.TECHNOLOGY);
+                return httpRequest.get();
             }
-        });
+
+            @Override
+            protected void onPostExecute(Response response) {
+                super.onPostExecute(response);
+                if (response.isSuccess()) {
+                    Log.i(TAG, "isSuccess:" + response.isSuccess());
+                    Log.d(TAG, "messageBody:" + response.getMessageBody());
+                } else {
+                    Log.e(TAG, "isSuccess:" + response.isSuccess());
+                }
+            }
+        }.execute();
 
     }
 

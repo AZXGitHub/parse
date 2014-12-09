@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParsePush.subscribeInBackground("", new SaveCallback() {
+        ParsePush.subscribeInBackground("hangouts", new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e == null) {

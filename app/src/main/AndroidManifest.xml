@@ -34,6 +34,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ResultActivity"
+            android:label="@string/app_name"/>
+
         <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.GcmBroadcastReceiver"

@@ -28,10 +28,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onResume() {
+        super.onResume();
+        subscribe();
+    }
 
+    private void subscribe() {
         ParsePush.subscribeInBackground("hangouts", new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -42,6 +44,16 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            subscribe();
+        }
+        setContentView(R.layout.activity_main);
 
         new AsyncTask<Void, Void, Response>() {
             @Override

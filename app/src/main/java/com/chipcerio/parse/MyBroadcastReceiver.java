@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.parse.ParsePushBroadcastReceiver;
 
 public class MyBroadcastReceiver extends ParsePushBroadcastReceiver {
@@ -21,12 +22,14 @@ public class MyBroadcastReceiver extends ParsePushBroadcastReceiver {
         Log.i(TAG, "onPushReceive");
 
         String data = intent.getExtras().getString(KEY_PUSH_DATA);
-        Log.i(TAG, "data:" + data); // json
+        Log.i(TAG, "data:" + data);
+
+        Gson gson = new Gson();
+        PushMessage pushMessage = gson.fromJson(data, PushMessage.class);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("You have a message")
-                .setContentText("Click to view")
+                .setContentTitle(pushMessage.getMessage())
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true);
 

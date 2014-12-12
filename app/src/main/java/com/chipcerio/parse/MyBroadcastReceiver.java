@@ -1,5 +1,7 @@
 package com.chipcerio.parse;
 
+import static com.chipcerio.parse.Common.TAG;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,7 +13,6 @@ import android.util.Log;
 import com.parse.ParsePushBroadcastReceiver;
 
 public class MyBroadcastReceiver extends ParsePushBroadcastReceiver {
-    private static final String TAG = "CHIPCERIO";
     public static final String EXTRA_DATA = "com.chipcerio.parse.DATA";
 
     @Override

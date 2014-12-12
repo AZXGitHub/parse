@@ -1,11 +1,12 @@
 package com.chipcerio.parse;
 
+import static com.chipcerio.parse.Common.TAG;
+
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 public class ResultActivity extends ActionBarActivity {
-    private static final String TAG = "CHIPCERIO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

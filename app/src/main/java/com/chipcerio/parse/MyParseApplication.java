@@ -9,6 +9,6 @@ public class MyParseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(this, "tUXmGboIaUB2aKru1LMpyo7IQ8GzAW0NtPpCDy4P", "e19Ls1IxN0eqBJvnZy2PWB2LJk0Ngnie3NfnWXjR");
+        Parse.initialize(this, Common.AppKey.APP_ID, Common.AppKey.CLIENT_KEY);
     }
 }

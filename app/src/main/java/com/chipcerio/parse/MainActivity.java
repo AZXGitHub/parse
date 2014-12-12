@@ -1,21 +1,17 @@
 package com.chipcerio.parse;
 
+import static com.chipcerio.parse.Common.TAG;
+
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,6 +20,11 @@ public class MainActivity extends ActionBarActivity {
         String SPORTS      = "a3k1grX5pU";
         String EDUCATIONAL = "cENWL5By5v";
         String OTHERS      = "3btYSTqO7T";
+    }
+
+    interface Class {
+        String CATEGORY = "/classes/Category/";
+        String EVENT = "/classes/Event/";
     }
 
     @Override
@@ -35,12 +36,31 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Toast.makeText(MainActivity.this, "Subscribed", Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "Subscribed");
                 } else {
-                    Toast.makeText(MainActivity.this, "Failed", Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "Failed");
                 }
             }
         });
+
+        new AsyncTask<Void, Void, Response>() {
+            @Override
+            protected Response doInBackground(Void... params) {
+                Request httpRequest = new Request(Class.CATEGORY + Category.TECHNOLOGY);
+                return httpRequest.get();
+            }
+
+            @Override
+            protected void onPostExecute(Response response) {
+                super.onPostExecute(response);
+                if (response.isSuccess()) {
+                    Log.i(TAG, "isSuccess:" + response.isSuccess());
+                    Log.d(TAG, "messageBody:" + response.getMessageBody());
+                } else {
+                    Log.e(TAG, "isSuccess:" + response.isSuccess());
+                }
+            }
+        }.execute();
 
     }
 
